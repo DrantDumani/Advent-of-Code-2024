@@ -14,14 +14,15 @@ function findSafe(reports) {
       if (levels[i] > levels[i - 1]) inc += 1;
       else if (levels[i] < levels[i - 1]) dec += 1;
     }
+
     if (inc === dec) {
       // report is unsafe. Move to the next one
       continue;
     }
     const seqDir = inc > dec ? "inc" : "dec";
-
     stack.push(levels.pop());
-    while (levels.length > 1) {
+
+    while (levels.length >= 1) {
       if (
         !checkSafety(stack[stack.length - 1], levels[levels.length - 1], seqDir)
       ) {
@@ -31,6 +32,7 @@ function findSafe(reports) {
         } else {
           dampener = true;
           if (
+            levels[levels.length - 2] === undefined ||
             checkSafety(
               stack[stack.length - 1],
               levels[levels.length - 2],
@@ -40,6 +42,9 @@ function findSafe(reports) {
             levels.pop();
           } else {
             stack.pop();
+            if (!stack.length) {
+              stack.push(levels.pop());
+            }
           }
         }
       } else {
@@ -47,7 +52,6 @@ function findSafe(reports) {
       }
     }
 
-    // console.log(report, isSafe, seqDir);
     if (isSafe) safe += 1;
   }
   return safe;
@@ -62,7 +66,6 @@ function checkSafety(prevNum, nextNum, direction) {
   }
 
   let diff = Math.abs(prevNum - nextNum);
-
   if (diff < 1 || diff > 3 || currDir !== direction) {
     return false;
   }
