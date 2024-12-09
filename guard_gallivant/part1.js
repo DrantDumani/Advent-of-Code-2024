@@ -1,5 +1,8 @@
 const fs = require("fs");
-const input = fs.readFileSync("./input.txt", "utf8").split(/\n/);
+const input = fs
+  .readFileSync("./input.txt", "utf8")
+  .split(/\n/)
+  .map((str) => str.split(""));
 
 function guardPath(map) {
   const directions = {
@@ -27,9 +30,7 @@ function guardPath(map) {
     } else if (map[y][x] === "X") {
       return 0 + travel(y + directions[dir].y, x + directions[dir].x);
     } else {
-      console.log(map[y][x], "Should change", y, x);
       map[y][x] = "X";
-      console.log(map[y][x]);
       return 1 + travel(y + directions[dir].y, x + directions[dir].x);
     }
   };
