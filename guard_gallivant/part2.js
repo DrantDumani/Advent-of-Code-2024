@@ -1,3 +1,7 @@
+// max call stack error...
+// instead of using recursion to find the guard's path, maybe just use a for loop?
+// store guard's position in stack.
+
 const fs = require("fs");
 const input = fs
   .readFileSync("./input.txt", "utf8")
@@ -19,7 +23,7 @@ function findObstaclePositions(map) {
     if (!map[y] || !map[y][x]) {
       // guard has left the map
       return 0;
-    } else if (visited[dir]?.[`${y},${x}`]) {
+    } else if (visited[`${dir}${y},${x}`]) {
       // guard is looping
       return 1;
     } else if (map[y][x] === "#") {
@@ -38,7 +42,7 @@ function findObstaclePositions(map) {
         newDir
       );
     } else {
-      visited[dir] = { ...visited[dir], [`${y},${x}`]: true };
+      visited[`${dir}${y},${x}`] = true;
       return findLoop(
         visited,
         map,
@@ -84,10 +88,12 @@ function guardPath(map) {
 
   // find guard's position and direction
   let { dir, currPos } = findGaurdStart(map);
-  let dirIndex = Object.keys(directions).indexOf(dir);
+  const dirKeys = Object.keys(directions);
+  let dirIndex = dirKeys.indexOf(dir);
+  // let dirIndex = Object.keys(directions).indexOf(dir);
   const fullPath = [];
 
-  const travel = (y, x) => {
+  const travel = (y, x, dir, dirIndex) => {
     if (!map[y] || !map[y][x]) {
       // return 0;
       return;
@@ -98,14 +104,24 @@ function guardPath(map) {
       const dirKeys = Object.keys(directions);
       dirIndex = (dirIndex + 1) % dirKeys.length;
       dir = dirKeys[dirIndex];
-      return travel(y + directions[dir].y, x + directions[dir].x);
+      return travel(
+        y + directions[dir].y,
+        x + directions[dir].x,
+        dir,
+        dirIndex
+      );
     } else {
       fullPath.push({ y, x, dir, tile: map[y][x] });
-      return travel(y + directions[dir].y, x + directions[dir].x);
+      return travel(
+        y + directions[dir].y,
+        x + directions[dir].x,
+        dir,
+        dirIndex
+      );
     }
   };
 
-  travel(currPos.y, currPos.x);
+  travel(currPos.y, currPos.x, dir, dirIndex);
   return fullPath;
 }
 
