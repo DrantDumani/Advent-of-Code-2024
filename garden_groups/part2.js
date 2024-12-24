@@ -17,6 +17,8 @@ function findPrice(garden) {
       explored[`${y},${x}`] = true;
       dims.a += 1;
 
+      // store all points on a vertex. If new vertex, you have a new side
+      // vertices may overlap. If they do, store them in a different property
       if (garden[y]?.[x] === plant && garden[y]?.[x + 1] !== plant) {
         if (!dims.vertices[`x${x + 1}`]) {
           dims.sides += 1;
@@ -54,7 +56,6 @@ function findPrice(garden) {
       }
 
       if (garden[y]?.[x] === plant && garden[y + 1]?.[x] !== plant) {
-        // if (garden[y + 1]?.[x]) {
         if (!dims.vertices[`y${y + 1}`]) {
           dims.sides += 1;
           dims.vertices[`y${y + 1}`] = [x];
@@ -87,7 +88,6 @@ function findPrice(garden) {
           } else {
             dims.vertices[`y${y - 1}`].push(x);
           }
-          // dims.vertices[`y${y - 1}`].push(x);
         }
       }
 
@@ -104,7 +104,7 @@ function findPrice(garden) {
       if (!explored[`${y},${x}`]) {
         let { a, sides, vertices } = getRegion(garden[y][x], y, x);
 
-        // if (garden[y][x] === "E") console.log(vertices);
+        // find 'breaks' in vertices. Breaks create new sides
         for (let key in vertices) {
           vertices[key].sort((a, b) => a - b);
           let vPoint = vertices[key][0];
@@ -115,7 +115,6 @@ function findPrice(garden) {
             vPoint = vertices[key][i];
           }
         }
-
         // console.log(a, "a", sides, "sides", garden[y][x], "plant");
 
         totalPrice = totalPrice + a * sides;
