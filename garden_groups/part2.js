@@ -20,74 +20,38 @@ function findPrice(garden) {
       // store all points on a vertex. If new vertex, you have a new side
       // vertices may overlap. If they do, store them in a different property
       if (garden[y]?.[x] === plant && garden[y]?.[x + 1] !== plant) {
-        if (!dims.vertices[`x${x + 1}`]) {
+        if (!dims.vertices[`+x${x}`]) {
           dims.sides += 1;
-          dims.vertices[`x${x + 1}`] = [y];
+          dims.vertices[`+x${x}`] = [y];
         } else {
-          if (dims.vertices[`x${x + 1}`].indexOf(y) !== -1) {
-            if (dims.vertices[`2x${x + 1}`]) {
-              dims.vertices[`2x${x + 1}`].push(y);
-            } else {
-              dims.sides += 1;
-              dims.vertices[`2x${x + 1}`] = [y];
-            }
-          } else {
-            dims.vertices[`x${x + 1}`].push(y);
-          }
+          dims.vertices[`+x${x}`].push(y);
         }
       }
 
       if (garden[y]?.[x] === plant && garden[y]?.[x - 1] !== plant) {
-        if (!dims.vertices[`x${x - 1}`]) {
+        if (!dims.vertices[`-x${x}`]) {
           dims.sides += 1;
-          dims.vertices[`x${x - 1}`] = [y];
+          dims.vertices[`-x${x}`] = [y];
         } else {
-          if (dims.vertices[`x${x - 1}`].indexOf(y) !== -1) {
-            if (dims.vertices[`2x${x - 1}`]) {
-              dims.vertices[`2x${x - 1}`].push(y);
-            } else {
-              dims.sides += 1;
-              dims.vertices[`2x${x - 1}`] = [y];
-            }
-          } else {
-            dims.vertices[`x${x - 1}`].push(y);
-          }
+          dims.vertices[`-x${x}`].push(y);
         }
       }
 
       if (garden[y]?.[x] === plant && garden[y + 1]?.[x] !== plant) {
-        if (!dims.vertices[`y${y + 1}`]) {
+        if (!dims.vertices[`+y${y}`]) {
           dims.sides += 1;
-          dims.vertices[`y${y + 1}`] = [x];
+          dims.vertices[`+y${y}`] = [x];
         } else {
-          if (dims.vertices[`y${y + 1}`].indexOf(x) !== -1) {
-            if (dims.vertices[`2y${y + 1}`]) {
-              dims.vertices[`2y${y + 1}`].push(x);
-            } else {
-              dims.sides += 1;
-              dims.vertices[`2y${y + 1}`] = [x];
-            }
-          } else {
-            dims.vertices[`y${y + 1}`].push(x);
-          }
+          dims.vertices[`+y${y}`].push(x);
         }
       }
 
       if (garden[y]?.[x] === plant && garden[y - 1]?.[x] !== plant) {
-        if (!dims.vertices[`y${y - 1}`]) {
+        if (!dims.vertices[`-y${y}`]) {
           dims.sides += 1;
-          dims.vertices[`y${y - 1}`] = [x];
+          dims.vertices[`-y${y}`] = [x];
         } else {
-          if (dims.vertices[`y${y - 1}`].indexOf(x) !== -1) {
-            if (dims.vertices[`2y${y - 1}`]) {
-              dims.vertices[`2y${y - 1}`].push(x);
-            } else {
-              dims.sides += 1;
-              dims.vertices[`2y${y - 1}`] = [x];
-            }
-          } else {
-            dims.vertices[`y${y - 1}`].push(x);
-          }
+          dims.vertices[`-y${y}`].push(x);
         }
       }
 
@@ -115,7 +79,6 @@ function findPrice(garden) {
             vPoint = vertices[key][i];
           }
         }
-        // console.log(a, "a", sides, "sides", garden[y][x], "plant");
 
         totalPrice = totalPrice + a * sides;
       }
